@@ -7,6 +7,7 @@ package com.redis;
 import com.redis.dao.UserDao;
 import com.redis.demo.User;
 import com.redis.util.ApplicationContextUtil;
+import com.redis.util.StringOps;
 
 /**
  *
@@ -14,16 +15,30 @@ import com.redis.util.ApplicationContextUtil;
  */
 public class redisMain {
 
+    public static StringOps stringOps = null;
+
+    static {
+        stringOps = (StringOps) ApplicationContextUtil.getBeanByBeanName("stringOps");
+    }
+
     public static void main(String[] args) {
+        setValue();
+        getValue();
+        deleteValue();
+        getValue();
+    }
 
-        User user = new User();
-        user.setUid("123456");
-        user.setAddress("浙江省");
-        UserDao userDao = (UserDao) ApplicationContextUtil.getBeanByBeanName("userDao");
-        userDao.save(user);
+    public static void setValue() {
+        stringOps.setValue("name", "Bill");
 
-        User ru = userDao.getUserInfoById("123456");
-        System.out.println("address = " + ru.getAddress());
+    }
 
+    public static void getValue() {
+        String name = stringOps.getValue("name");
+        System.out.println("name = " + name);
+    }
+
+    public static void deleteValue() {
+        stringOps.deleteValue("name");
     }
 }
